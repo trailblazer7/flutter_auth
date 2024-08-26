@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_elevated_button/gradient_elevated_button.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,9 +28,12 @@ class AuthorizationForm extends StatefulWidget {
 
 class _AuthorizationFormState extends State<AuthorizationForm> {
   final _formKey = GlobalKey<FormState>();
+  final _successColor = const Color.fromRGBO(39, 178, 116, 1);
+  final _errorColor = const Color.fromRGBO(255, 128, 128, 1);
   String _email = '';
   String _password = '';
   bool _submitted = false;
+  bool _isPasswordVisible = false;
 
   Map<String, bool> _emailErrors = {
     'empty': false,
@@ -87,11 +92,18 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
     return _submitted
       ? Text(
           message,
-          style: TextStyle(
-            color: hasError ? Colors.red : Colors.green,
+          style: GoogleFonts.inter(
+            textStyle: TextStyle(
+              fontSize: 13,
+              color: hasError ? _errorColor : _successColor,
+            )
           ),
         )
       : const SizedBox.shrink();
+  }
+
+  Color _getInputTextColor(bool submitted, bool hasErrors) {
+    return submitted ? (hasErrors ? _errorColor : _successColor) : const Color.fromRGBO(21, 29, 81, 1);
   }
 
   @override
@@ -104,30 +116,71 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-                Colors.blue,
-                Colors.red,
+                Color.fromRGBO(244, 249, 255, 1),
+                Color.fromRGBO(224, 237, 251, 1),
               ],
             )
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(30),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Positioned(
+                    top: 200,
+                    left: 100,
+                    child: Image.asset(
+                      'images/star.png',
+                      height: 25,
+                      width: 25,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 120, bottom: 36),
+                    child: Center(
+                      child: Text(
+                        'Sign up',
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                            color: Color.fromRGBO(74, 78, 113, 1),
+                         )
+                        ),
+                      ),
+                      
+                    ),
+                  ),
                   TextFormField(
+                    style: GoogleFonts.inter(
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        color: _getInputTextColor(_submitted, _emailErrors.values.any((e) => e)),
+                      )
+                    ),
                     decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(left: 20, right: 20, top: 13, bottom: 13),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Create your email',
+                      hintStyle: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Color.fromRGBO(111, 145, 188, 1)
+                        )
+                      ),
                       enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: _submitted && _emailErrors.values.any((e) => e) ? Colors.red : Colors.grey,
+                          color: _submitted ? (_emailErrors.values.any((e) => e) ? _errorColor : _successColor) : Colors.white,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: _submitted && _emailErrors.values.any((e) => e) ? Colors.red : Colors.grey,
+                          color: _submitted ? (_emailErrors.values.any((e) => e) ? _errorColor : _successColor) : const Color.fromRGBO(111, 145, 188, 1),
                         ),
                       ),
                     ),
@@ -140,30 +193,63 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                     },
                   ),
                   const SizedBox(height: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildErrorText('Email is required', _emailErrors['empty']!),
-                      _buildErrorText('Invalid email address', _emailErrors['format']!),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildErrorText('Email is required', _emailErrors['empty']!),
+                        _buildErrorText('Invalid email address', _emailErrors['format']!),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   TextFormField(
+                    style: GoogleFonts.inter(
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        color: _getInputTextColor(_submitted, _passwordErrors.values.any((e) => e)),
+                      )
+                    ),
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      contentPadding: const EdgeInsets.only(left: 20, right: 20, top: 13, bottom: 13),
+                      hintText: 'Create your password',
+                      hintStyle: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Color.fromRGBO(111, 145, 188, 1)
+                        )
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
                       border: const OutlineInputBorder(),
                       enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: _submitted && _passwordErrors.values.any((e) => e) ? Colors.red : Colors.grey,
+                          color: _submitted ? (_passwordErrors.values.any((e) => e) ? _errorColor : _successColor) : Colors.white,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: _submitted && _passwordErrors.values.any((e) => e) ? Colors.red : Colors.grey,
+                          color: _submitted ? (_passwordErrors.values.any((e) => e) ? _errorColor : _successColor) : const Color.fromRGBO(111, 145, 188, 1),
                         ),
                       ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          color: _getInputTextColor(_submitted, _passwordErrors.values.any((e) => e)),
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: !_isPasswordVisible,
                     onChanged: (value) {
                       setState(() {
                         _password = value;
@@ -172,21 +258,48 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                     },
                   ),
                   const SizedBox(height: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildErrorText('Password is required', _passwordErrors['empty']!),
-                      _buildErrorText('8 characters or more (no spaces)', _passwordErrors['lengthMin']!),
-                      _buildErrorText('No more than 64 characters', _passwordErrors['lengthMax']!),
-                      _buildErrorText('Uppercase and lowercase letters', _passwordErrors['uppercase']!),
-                      _buildErrorText('At least one digit', _passwordErrors['digit']!),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 8, bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildErrorText('Password is required', _passwordErrors['empty']!),
+                        _buildErrorText('8 characters or more (no spaces)', _passwordErrors['lengthMin']!),
+                        _buildErrorText('No more than 64 characters', _passwordErrors['lengthMax']!),
+                        _buildErrorText('Uppercase and lowercase letters', _passwordErrors['uppercase']!),
+                        _buildErrorText('At least one digit', _passwordErrors['digit']!),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: const Text('Sign up'),
-                  ),
+                  Center(
+                    child: SizedBox(
+                      height: 48,
+                      width: 240,
+                      child: GradientElevatedButton(
+                        onPressed: _submitForm,
+                        style: GradientElevatedButton.styleFrom(
+                          gradient: const LinearGradient(colors: [
+                            Color.fromRGBO(112, 194, 255, 1),
+                            Color.fromRGBO(80, 112, 255, 1),
+                          ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Text(
+                          'Sign up',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.white,
+                          )
+                          ),
+                        ),
+                      ),
+                    )
+                  )
                 ],
               ),
             ),
