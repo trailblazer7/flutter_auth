@@ -5,7 +5,6 @@ import 'package:flutter_auth/widgets/custom_text_form_field.dart';
 import 'package:flutter_auth/widgets/error_text.dart';
 import 'package:flutter_auth/widgets/form_title.dart';
 import 'package:flutter_auth/widgets/sign_up_button.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AuthorizationForm extends StatefulWidget {
   const AuthorizationForm({super.key});
