@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/styles/styles.dart';
 import 'package:flutter_auth/widgets/bottom_icons.dart';
 import 'package:flutter_auth/widgets/custom_text_form_field.dart';
+import 'package:flutter_auth/widgets/error_text.dart';
 import 'package:flutter_auth/widgets/form_title.dart';
 import 'package:flutter_auth/widgets/sign_up_button.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,8 +16,6 @@ class AuthorizationForm extends StatefulWidget {
 
 class _AuthorizationFormState extends State<AuthorizationForm> {
   final _formKey = GlobalKey<FormState>();
-  final _successColor = const Color.fromRGBO(39, 178, 116, 1);
-  final _errorColor = const Color.fromRGBO(255, 128, 128, 1);
   String _email = '';
   String _password = '';
   bool _submitted = false;
@@ -74,24 +74,6 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
     }
   }
 
-  Widget _buildErrorText(String message, bool hasError) {
-    return _submitted
-      ? Text(
-          message,
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
-              fontSize: 13,
-              color: hasError ? _errorColor : _successColor,
-            )
-          ),
-        )
-      : const SizedBox.shrink();
-  }
-
-  Color _getInputTextColor(bool submitted, bool hasErrors) {
-    return submitted ? (hasErrors ? _errorColor : _successColor) : const Color.fromRGBO(21, 29, 81, 1);
-  }
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -139,8 +121,8 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                     ): const SizedBox.shrink()),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: isPortrait ? 70 : 5,
-                        bottom: isPortrait ? 23 : 10,
+                        top: isPortrait ? 70 : 0,
+                        bottom: isPortrait ? 23 : 0,
                       ),
                       child: const FormTitle(title: 'Sign up')
                     ),
@@ -161,8 +143,8 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildErrorText('Email is required', _emailErrors['empty']!),
-                          _buildErrorText('Invalid email address', _emailErrors['format']!),
+                          ErrorText(submitted: _submitted, message: 'Email is required', hasError: _emailErrors['empty']!, isPortrait: isPortrait),
+                          ErrorText(submitted: _submitted, message: 'Invalid email address', hasError: _emailErrors['format']!, isPortrait: isPortrait),
                         ],
                       ),
                     ),
@@ -180,7 +162,7 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                       obscureText: !_isPasswordVisible,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          color: _getInputTextColor(_submitted, _passwordErrors.values.any((e) => e)),
+                          color: _submitted ? (_passwordErrors.values.any((e) => e) ? AppColors.errorColor : AppColors.successColor) : const Color.fromRGBO(21, 29, 81, 1),
                           _isPasswordVisible
                               ? Icons.visibility
                               : Icons.visibility_off,
@@ -198,11 +180,11 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildErrorText('Password is required', _passwordErrors['empty']!),
-                          _buildErrorText('8 characters or more (no spaces)', _passwordErrors['lengthMin']!),
-                          _buildErrorText('No more than 64 characters', _passwordErrors['lengthMax']!),
-                          _buildErrorText('Uppercase and lowercase letters', _passwordErrors['uppercase']!),
-                          _buildErrorText('At least one digit', _passwordErrors['digit']!),
+                          ErrorText(submitted: _submitted, message: 'Password is required', hasError: _passwordErrors['empty']!, isPortrait: isPortrait),
+                          ErrorText(submitted: _submitted, message: '8 characters or more (no spaces)', hasError: _passwordErrors['lengthMin']!, isPortrait: isPortrait),
+                          ErrorText(submitted: _submitted, message: 'No more than 64 characters', hasError: _passwordErrors['lengthMax']!, isPortrait: isPortrait),
+                          ErrorText(submitted: _submitted, message: 'Uppercase and lowercase letters', hasError: _passwordErrors['uppercase']!, isPortrait: isPortrait),
+                          ErrorText(submitted: _submitted, message: 'At least one digit', hasError: _passwordErrors['digit']!, isPortrait: isPortrait),
                         ],
                       ),
                     ),
