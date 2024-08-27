@@ -196,7 +196,7 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: isPortrait ? 8 : 2, bottom: isPortrait ? 20 : 5),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildErrorText('Password is required', _passwordErrors['empty']!),
                           _buildErrorText('8 characters or more (no spaces)', _passwordErrors['lengthMin']!),
